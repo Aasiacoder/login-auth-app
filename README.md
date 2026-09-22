@@ -4,7 +4,7 @@ This project was built with [Lovable](https://lovable.dev).
 
 **Live app**: https://login-auth-app.lovable.app
 
-## Project DEscription
+## Project Description
 
 What I Built
 
