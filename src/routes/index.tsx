@@ -25,8 +25,8 @@ function Index() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
-  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string | undefined; password?: string | undefined }>({});
+  const [touched, setTouched] = useState<{ email?: boolean | undefined; password?: boolean | undefined }>({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 

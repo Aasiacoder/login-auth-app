@@ -26,8 +26,8 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string; confirm?: string }>({});
-  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean; confirm?: boolean }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string | undefined; password?: string | undefined; confirm?: string | undefined }>({});
+  const [touched, setTouched] = useState<{ email?: boolean | undefined; password?: boolean | undefined; confirm?: boolean | undefined }>({});
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);

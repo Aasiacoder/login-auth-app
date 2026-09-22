@@ -27,8 +27,8 @@ function ResetPasswordPage() {
   const [ready, setReady] = useState<"checking" | "valid" | "invalid">("checking");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [fieldErrors, setFieldErrors] = useState<{ password?: string; confirm?: string }>({});
-  const [touched, setTouched] = useState<{ password?: boolean; confirm?: boolean }>({});
+  const [fieldErrors, setFieldErrors] = useState<{ password?: string | undefined; confirm?: string | undefined }>({});
+  const [touched, setTouched] = useState<{ password?: boolean | undefined; confirm?: boolean | undefined }>({});
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
