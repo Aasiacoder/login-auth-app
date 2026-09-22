@@ -1,0 +1,6 @@
+---
+name: Authentication scope
+description: Email/password auth with minimal user profiles and last-login tracking
+type: feature
+---
+Use email/password authentication. Store only the authenticated user ID and last login timestamp in users_profile. Protect the Home screen, redirect signed-out users to Login, and provide logout.
