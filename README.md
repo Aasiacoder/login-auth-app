@@ -49,6 +49,4 @@ Loading states on buttons for better UX
 
 ## Tech Stack
 
-TypeScript
-CSS
-Supabase
+TypeScript, CSS, Supabase 
