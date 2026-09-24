@@ -66,6 +66,11 @@ function Index() {
       setLoading(false);
       return;
     }
+    const next = new URLSearchParams(window.location.search).get("next");
+    if (next && next.startsWith("/") && !next.startsWith("//")) {
+      window.location.href = next;
+      return;
+    }
     await navigate({ to: "/home", replace: true });
   }
 
