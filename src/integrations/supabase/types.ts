@@ -17,18 +17,21 @@ export type Database = {
       users_profile: {
         Row: {
           created_at: string
+          email: string | null
           id: string
           last_login_at: string
           updated_at: string
         }
         Insert: {
           created_at?: string
+          email?: string | null
           id: string
           last_login_at?: string
           updated_at?: string
         }
         Update: {
           created_at?: string
+          email?: string | null
           id?: string
           last_login_at?: string
           updated_at?: string

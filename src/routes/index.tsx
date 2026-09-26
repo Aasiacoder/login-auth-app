@@ -60,7 +60,7 @@ function Index() {
     const timestamp = new Date().toISOString();
     const { error: profileError } = await supabase
       .from("users_profile")
-      .upsert({ id: data.user.id, last_login_at: timestamp }, { onConflict: "id" });
+      .upsert({ id: data.user.id, email: data.user.email ?? null, last_login_at: timestamp }, { onConflict: "id" });
     if (profileError) {
       setError("Signed in, but the login time could not be saved.");
       setLoading(false);
