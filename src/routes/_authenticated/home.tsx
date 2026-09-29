@@ -25,9 +25,9 @@ function HomePage() {
 
   useEffect(() => {
     let active = true;
-    supabase.from("users_profile").select("last_login_at").eq("id", user.id).single()
+    supabase.from("users_profile").select("last_login").eq("id", user.id).single()
       .then(({ data }) => {
-        if (active) setLastLogin(data?.last_login_at ?? null);
+        if (active) setLastLogin(data?.last_login ?? null);
       });
     return () => { active = false; };
   }, [user.id]);
