@@ -1,8 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogOut, Clock3 } from "lucide-react";
+import { useServerFn } from "@tanstack/react-start";
+import { LogOut, Clock3, Download, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { generateUsersPdf } from "@/lib/users-report.functions";
 
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({
@@ -21,6 +23,8 @@ export const Route = createFileRoute("/_authenticated/home")({
 function HomePage() {
   const { user } = Route.useRouteContext();
   const navigate = useNavigate();
+  const generatePdf = useServerFn(generateUsersPdf);
+  const [downloading, setDownloading] = useState(false);
   const [lastLogin, setLastLogin] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,6 +35,24 @@ function HomePage() {
       });
     return () => { active = false; };
   }, [user.id]);
+
+  async function handleDownload() {
+    setDownloading(true);
+    try {
+      const { base64 } = await generatePdf();
+      const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+      const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `registered-users-${new Date().toISOString().slice(0, 10)}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("Could not generate the PDF. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
+  }
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -43,9 +65,14 @@ function HomePage() {
       <div className="blur-shape blur-shape-two" aria-hidden="true" />
       <header className="relative z-10 flex items-center justify-between border-b border-border px-6 py-5 sm:px-10">
         <span className="font-display text-lg font-semibold">AEGIS</span>
-        <Button variant="outline" onClick={handleLogout} className="bg-transparent">
-          <LogOut /> Log out
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleDownload} disabled={downloading} className="bg-transparent">
+            {downloading ? <LoaderCircle className="animate-spin" /> : <Download />} Download PDF
+          </Button>
+          <Button variant="outline" onClick={handleLogout} className="bg-transparent">
+            <LogOut /> Log out
+          </Button>
+        </div>
       </header>
       <section className="enter-login relative z-10 flex flex-1 flex-col items-center justify-center px-6 text-center">
         <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary">
