@@ -11,13 +11,13 @@ export default defineTool({
     if (!ctx.isAuthenticated()) return { content: [{ type: "text", text: "Not authenticated" }], isError: true };
     const { data, error } = await supabaseForUser(ctx)
       .from("users_profile")
-      .select("last_login_at")
+      .select("last_login")
       .eq("id", ctx.getUserId()!)
       .maybeSingle();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     const profile = {
       email: ctx.getUserEmail() ?? null,
-      last_login_at: (data?.last_login_at as string | null | undefined) ?? null,
+      last_login_at: (data?.last_login as string | null | undefined) ?? null,
     };
     return { content: [{ type: "text", text: JSON.stringify(profile) }], structuredContent: { profile } };
   },
