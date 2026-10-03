@@ -1,0 +1,1 @@
+revoke all on function public.handle_new_user_role() from public, anon, authenticated;

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { friendlyAuthError, validateEmail, validatePassword } from "@/lib/auth-validation";
+import { getMyRole, homePathForRole } from "@/lib/roles";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -71,7 +72,8 @@ function Index() {
       window.location.href = next;
       return;
     }
-    await navigate({ to: "/home", replace: true });
+    const role = await getMyRole();
+    await navigate({ to: homePathForRole(role), replace: true });
   }
 
   return (
