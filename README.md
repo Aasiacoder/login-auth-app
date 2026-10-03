@@ -71,9 +71,3 @@ flowchart LR
 - Security-definer RPCs (`admin_list_users`, `admin_set_user_role`) check `has_role()`; admins cannot change their own role.
 - Route guards in `beforeLoad` redirect users away from `/admin` and admins to `/admin`.
 - The PDF server function verifies the caller is an admin before generating.
-
-**Make the first admin** (Supabase SQL Editor):
-```sql
-update public.user_roles set role = 'admin', updated_at = now()
-where user_id = (select id from auth.users where email = 'YOUR_EMAIL');
-```
