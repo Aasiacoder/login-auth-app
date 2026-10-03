@@ -41,9 +41,9 @@ Secure Access Hub — generated ${fmt(new Date().toISOString())}
 
 Total users: **${users.length}**
 
-| # | Email | Registered | Last login | Verified |
-|---|---|---|---|---|
-${rows || "| — | No users yet | — | — | — |"}
+| # | Email | Role | Registered | Last login | Verified |
+|---|---|---|---|---|---|
+${rows || "| — | No users yet | — | — | — | — |"}
 `;
 
     const res = await fetch("https://api.papermill.io/v2/pdf?template=papermill-simple-report", {
