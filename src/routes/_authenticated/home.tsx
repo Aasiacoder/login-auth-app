@@ -1,16 +1,20 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LogOut, Clock3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/home")({
+  beforeLoad: ({ context }) => {
+    if (context.role === "admin") throw redirect({ to: "/admin" });
+  },
   head: () => ({
     meta: [
-      { title: "Home — Aegis" },
-      { name: "description", content: "Your private Aegis home." },
-      { property: "og:title", content: "Home — Aegis" },
-      { property: "og:description", content: "Your private Aegis home." },
+      { title: "Welcome — Aegis" },
+      { name: "description", content: "Your private Aegis welcome screen." },
+      { property: "og:title", content: "Welcome — Aegis" },
+      { property: "og:description", content: "Your private Aegis welcome screen." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -25,9 +29,9 @@ function HomePage() {
 
   useEffect(() => {
     let active = true;
-    supabase.from("users_profile").select("last_login_at").eq("id", user.id).single()
+    supabase.from("users_profile").select("last_login").eq("id", user.id).single()
       .then(({ data }) => {
-        if (active) setLastLogin(data?.last_login_at ?? null);
+        if (active) setLastLogin(data?.last_login ?? null);
       });
     return () => { active = false; };
   }, [user.id]);
@@ -51,7 +55,9 @@ function HomePage() {
         <span className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border border-primary/30 bg-primary/10 text-primary">
           <Clock3 className="h-5 w-5" />
         </span>
-        <h1 className="font-display text-5xl font-semibold sm:text-7xl">Hello World</h1>
+        <h1 className="font-display text-5xl font-semibold sm:text-7xl">Welcome</h1>
+        <p className="mt-4 text-base text-muted-foreground">Signed in as {user.email}</p>
+        <Badge variant="secondary" className="mt-3">User</Badge>
         <p className="mt-5 text-sm text-muted-foreground">
           Last login {lastLogin ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(new Date(lastLogin)) : "just now"}
         </p>

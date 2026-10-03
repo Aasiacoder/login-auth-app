@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { friendlyAuthError, validateEmail, validatePassword } from "@/lib/auth-validation";
+import { getMyRole, homePathForRole } from "@/lib/roles";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -60,7 +61,7 @@ function Index() {
     const timestamp = new Date().toISOString();
     const { error: profileError } = await supabase
       .from("users_profile")
-      .upsert({ id: data.user.id, email: data.user.email ?? null, last_login_at: timestamp }, { onConflict: "id" });
+      .upsert({ id: data.user.id, email: data.user.email ?? null, last_login: timestamp }, { onConflict: "id" });
     if (profileError) {
       setError("Signed in, but the login time could not be saved.");
       setLoading(false);
@@ -71,7 +72,8 @@ function Index() {
       window.location.href = next;
       return;
     }
-    await navigate({ to: "/home", replace: true });
+    const role = await getMyRole();
+    await navigate({ to: homePathForRole(role), replace: true });
   }
 
   return (

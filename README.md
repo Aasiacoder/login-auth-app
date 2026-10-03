@@ -50,3 +50,30 @@ Loading states on buttons for better UX
 ## Tech Stack
 
 TypeScript, CSS, Supabase 
+
+## Task 4: Role-Based Access
+
+**Flows**
+- Admin: Login → check role → `/admin` (User List, role management, PDF download)
+- User: Login → check role → `/home` (Welcome screen)
+
+```mermaid
+flowchart LR
+  U[User] --> L[Login] --> A[Supabase Auth] --> R{"get_my_role()"}
+  R -- admin --> AD[/admin/]
+  R -- user --> H[/home/]
+  AD --> D[Role dropdown] --> S["admin_set_user_role()"] --> T[(user_roles)]
+```
+
+**Security**
+- Roles live in a separate `user_roles` table (never on the profile), so users cannot promote themselves.
+- RLS: users can read only their own role; admins can read all. No client write policies exist.
+- Security-definer RPCs (`admin_list_users`, `admin_set_user_role`) check `has_role()`; admins cannot change their own role.
+- Route guards in `beforeLoad` redirect users away from `/admin` and admins to `/admin`.
+- The PDF server function verifies the caller is an admin before generating.
+
+**Make the first admin** (Supabase SQL Editor):
+```sql
+update public.user_roles set role = 'admin', updated_at = now()
+where user_id = (select id from auth.users where email = 'YOUR_EMAIL');
+```
